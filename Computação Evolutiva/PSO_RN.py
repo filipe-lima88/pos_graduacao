@@ -9,6 +9,10 @@ from sklearn import datasets
 """     
     Otimizar uma rede neural artificial com PSO para o dataset IRIS.
 """
+dict_activation = {1:"identity", 2:"logistic", 3:"tahn", 4:"relu" }
+dict_solver = {1:"lbfgs", 2:"sgd", 3:"adam"}
+dict_learning_rate = {1:"constant", 2:"invscaling", 3:"adaptive"}
+
 iris = datasets.load_iris()
 x = iris.data[:, :2]
 y = iris.target
@@ -43,6 +47,23 @@ class Area():
         for particula in self.particulas:
             particula.__str__()
 
+    def fitness_mlp(self):
+        clf = MLPClassifier(solver='sgd', 
+                    alpha=1e-5, 
+                    hidden_layer_sizes=(5,), 
+                    random_state=1,
+                    learning_rate='adaptive', #constant
+                    learning_rate_init=txAprendizadoDict[numeroIteracoes], 
+                    momentum=txMomentumDict[numeroIteracoes],
+                    max_iter=varMaxIter,
+                    early_stopping=False,
+                    activation='logistic',
+                    validation_fraction=0.3,
+                    tol=0.000001)
+        clf.fit(x_train, y_train)
+        y_pred = clf.predict(x_test)
+        return y_pred
+
     def fitness(self, particula):
         """
             f(x,y) = 100*(y-x²)² + (1-x)²
@@ -50,20 +71,9 @@ class Area():
         # x = particula.posicao[0]
         # y = particula.posicao[1]
         # fx = 100*(y-x**2)**2 + (1-x)**2
-        clf = MLPClassifier(solver='sgd', 
-                            alpha=1e-5, 
-                            hidden_layer_sizes=(5,), 
-                            random_state=1,
-                            learning_rate='adaptive', #constant
-                            learning_rate_init=txAprendizadoDict[numeroIteracoes], 
-                            momentum=txMomentumDict[numeroIteracoes],
-                            max_iter=varMaxIter,
-                            early_stopping=False,
-                            activation='logistic',
-                            validation_fraction=0.3,
-                            tol=0.000001)
+        fitness = fitness_mlp()
 
-        return fx
+        return fitness
         # return 100*(particle.position[0]-(particle.position[1]**2))**2 + (1-particle.position[1])**2
 
     def set_pbest(self):
@@ -86,8 +96,8 @@ class Area():
         c2 = 0.9 
         for particula in self.particulas:
             # global W
-            new_velocidade = (W*particula.velocidade) + (c1*random.random()) * (particula.pbest_posicao - particula.posicao) + (random.random()*c2) * (self.gbest_posicao - particula.posicao)
-            particula.velocidade = new_velocidade
+            nova_velocidade = (W*particula.velocidade) + (c1*random.random()) * (particula.pbest_posicao - particula.posicao) + (random.random()*c2) * (self.gbest_posicao - particula.posicao)
+            particula.velocidade = nova_velocidade
             particula.move()
 
 class RedeNeural():
