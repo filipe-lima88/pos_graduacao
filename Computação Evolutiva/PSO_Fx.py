@@ -72,37 +72,49 @@ class Area():
             particula.velocidade = new_velocidade
             particula.move()
 
-def plot_grafico(lista_pso):   
+def plot(resultados):
     import matplotlib.pyplot as plt
-    from mpl_toolkits.mplot3d import Axes3D
-
-    lista_posicoes = []
-    lista_parametros = []
-    lista_interacoes = []
-    x = []
-    y = []
-    for item in lista_pso:
-       lista_posicoes.append(item[0]) 
-       x.append(item[0][0])
-       y.append(item[0][1])
-    #    lista_interacoes.append(item[1]) 
-    #    lista_parametros.append(item[2])
-    # plotting the points  
-    # plt.plot(x, y)
-    # plt.plot(x, y, label = str(item[2]) + "com " + str(item[1]))    
-    # plt.title('Two lines on same graph!') 
-    # plotting the points  
-    # plt.plot(x, y, color='green', linestyle='dashed', linewidth = 3, 
-    #         marker='o', markerfacecolor='blue', markersize=12)
-    fig, ax  = plt.subplots()
-    scatter  = ax.scatter(x, y, c=3)
-    legenda  = ax.legend(*scatter.legend_elements(), loc="upper left", title="Classes")
-    ax.add_artist(legenda)
-    # show a legend on the plot 
-    # plt.legend() 
-    # plt.xlabel('x') 
-    # plt.ylabel('y') 
+    fig, ax = plt.subplots()
+    ax.plot(resultados[0][0][0],resultados[0][0][1],'r',label='params 1')
+    ax.plot(resultados[1][0][0],resultados[1][0][1],'b',label='params 2')
+    ax.plot(resultados[2][0][0],resultados[2][0][1],'g',label='params 3')
+   
+    ax.set(xlabel='Geracao', ylabel='Fitness (Media)', title='Convergência')
+    plt.legend(loc='lower right')
+    ax.grid()
     plt.show()
+
+# def plot_grafico(lista_pso):   
+    # import matplotlib.pyplot as plt
+    # from mpl_toolkits.mplot3d import Axes3D
+
+    # lista_posicoes = []
+    # lista_parametros = []
+    # lista_interacoes = []
+    # x = []
+    # y = []
+    # for item in lista_pso:
+    #    lista_posicoes.append(item[0]) 
+    #    x.append(item[0][0])
+    #    y.append(item[0][1])
+    # #    lista_interacoes.append(item[1]) 
+    # #    lista_parametros.append(item[2])
+    # # plotting the points  
+    # # plt.plot(x, y)
+    # # plt.plot(x, y, label = str(item[2]) + "com " + str(item[1]))    
+    # # plt.title('Two lines on same graph!') 
+    # # plotting the points  
+    # # plt.plot(x, y, color='green', linestyle='dashed', linewidth = 3, 
+    # #         marker='o', markerfacecolor='blue', markersize=12)
+    # fig, ax  = plt.subplots()
+    # scatter  = ax.scatter(x, y, c=3)
+    # legenda  = ax.legend(*scatter.legend_elements(), loc="upper left", title="Classes")
+    # ax.add_artist(legenda)
+    # # show a legend on the plot 
+    # # plt.legend() 
+    # # plt.xlabel('x') 
+    # # plt.ylabel('y') 
+    # plt.show()
             
 def main():
     """ W, c1 e c2 """
@@ -137,7 +149,8 @@ def main():
     lista_resultados.append(PSO(lista_parametros1))
     lista_resultados.append(PSO(lista_parametros2))
     lista_resultados.append(PSO(lista_parametros3))
-    plot_grafico(lista_resultados)
+    # plot_grafico(lista_resultados)
+    plot(lista_resultados)
 
 if __name__ == '__main__':
     main()
